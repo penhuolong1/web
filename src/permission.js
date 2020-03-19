@@ -3,13 +3,14 @@ import router from "./router/";
 import store from "./store/";
 // import { Message, MessageBox } from "element-ui";
 
-const whiteList = ["/login", "/loginAdmin", "/register", "/resetPwd","/adminMenu", "/adminPage", "/adminMenu/ce","/ce"]; // 不重定向白名单
+const whiteList = ["/login", "/loginAdmin", "/register", "/resetPwd","/home","/home/caseCenter","/home/mediationOrg", "/home/index"]; // 不重定向白名单
 
 // main.js 路由守卫
 router.beforeEach(async (to, from, next) => {
   console.log("路由拦截", to.path);
+  console.log("用户角色", store.getters.getRoles)
   // 判断是否有角色身份（代表已登录）
-  if (store.getters.getRoles.length > 0) {
+  if (store.getters.getRoles !== 0 && store.getters.getRoles) {
     console.log("已登录，有角色身份");
 
     if (to.path === "/login" || to.path === "/loginAdmin") {

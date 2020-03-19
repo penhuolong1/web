@@ -5,8 +5,8 @@
       <el-menu-item
         class="menu-item"
         v-if="!item.children && !item.hidden"
-        :key="item.path"
-        :index="parent ? parent + '/' + item.path : item.path"
+        :key="parentPath+'/'+item.path"
+        :index="parentPath+'/'+item.path"
       >
         <i :class="item.meta.icon ? item.meta.icon : ''"></i>
         <span slot="title">
@@ -28,9 +28,7 @@
         "
         :key="item.path"
         :index="
-          parent
-            ? parent + '/' + item.path + '/' + item.children[0].path
-            : item.path + '/' + item.children[0].path
+          item.children[0].path
         "
       >
         <i :class="
@@ -56,7 +54,7 @@
               (item.children.length === 1 && !item.alone && typeof(item.children[0])!=='undefined'))
         "
         :key="item.path"
-        :index="parent ? parent + '/' + item.path : item.path"
+        :index="item.path"
       >
         <template slot="title">
           <i :class="item.meta.icon ? item.meta.icon : ''"></i>
@@ -70,7 +68,7 @@
         </template>
         <sidebar-item
           :menu="item.children"
-          :parent="parent ? parent + '/' + item.path : item.path"
+          :parent="item.path"
         />
       </el-submenu>
       <!-- 递归 -->
@@ -79,24 +77,19 @@
 </template>
 
 <script>
+import { menuRouter } from '@/router/index'
 export default {
   name: 'SidebarItem',
-  props: ['menu', 'parent'],
   data() {
     return {
-      menuArray: [] // 菜单的列表
+      menu: null, // 菜单的列表
+      parentPath: '/home' // 父路由
     }
   },
   created() {
-    this.getMenu()
+    this.menu = menuRouter
   },
-  methods: {
-    // 把本地后台路由的子节点作为菜单
-    getMenu() {
-      this.menuArray = this.menu[0].children
-      console.log(this.menuArray)
-    }
-  }
+  methods: {}
 }
 </script>
 
@@ -114,6 +107,7 @@ export default {
     width: 44px;
     line-height: 44px;
     background-color: $IconBg;
+    margin-top: -2px;
   }
   &.is-active {
     background-color: $menuActiveBg;

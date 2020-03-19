@@ -1,6 +1,6 @@
 //全局常量文件
-const APP_NAME = "wenshu-sys";
+const SYS_NAME = "TIANJIE-sys";
 
 export default {
-  APP_NAME
+  SYS_NAME
 };

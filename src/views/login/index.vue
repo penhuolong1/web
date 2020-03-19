@@ -34,7 +34,7 @@
                 </el-form-item>
                 <el-form-item prop="username">
                   <el-input
-                    type="text"
+                    type="password"
                     v-model="loginForm.password"
                     auto-complete="off"
                     placeholder="密码"
@@ -78,15 +78,20 @@
 </template>
 <script>
 import loginMixin from './login.mixin'
+import GLOBVAL from '@/utils/constVal'
 export default {
   name: 'Login',
   mixins: [loginMixin],
   data() {
     return {
+      local_username: `${GLOBVAL.SYS_NAME}_userName`, // 记住账号密码时localstorage保存的账号键名
+      local_userpwd: `${GLOBVAL.SYS_NAME}_userPwd`, // 记住账号密码时localstorage保存的密码键名
       loginForm: {
-        username: localStorage.getItem(this.mark) || '',
-        password: ''
-      }
+        // 登陆用户信息
+        username: localStorage.getItem(this.local_username) || '',
+        password: localStorage.getItem(this.local_userpwd) || ''
+      },
+      remenberCheck: false
     }
   }
 }

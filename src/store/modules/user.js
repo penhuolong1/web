@@ -3,7 +3,7 @@ import { login, getUserInfo, optionRole } from "@/api/user/user";
 import { resetRouter } from "@/router";
 import GLOBAL from "@/utils/constVal";
 
-let app = GLOBAL.APP_NAME;
+let app = GLOBAL.SYS_NAME;
 let user_roles = app + "-userRoles";
 let user_Info = app + "-userInfo";
 const user = {

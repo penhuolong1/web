@@ -8,13 +8,13 @@
       <my-header></my-header>
       <!-- 菜单选项卡 -->
       <!-- 视图容器 -->
-      <div class="viewStyle">
+      <!-- <div class="viewStyle">
         <Table
           :tableData="tableData"
           :tableHead="tableHead"
         ></Table>
-      </div>
-      <!-- <router-view class="viewStyle"></router-view> -->
+      </div> -->
+      <router-view class="viewStyle"></router-view>
     </div>
   </div>
 </template>

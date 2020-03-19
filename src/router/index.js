@@ -5,6 +5,38 @@ Vue.use(Router);
 
 import Layout from "@/views/layout/layout"; //登录后的页面视图容器
 
+
+// 右侧菜单路由
+export const menuRouter = [
+  {
+    path: "index",
+    name: "index",
+    component: () => import("@/views/home/index"),
+    meta: {
+      icon: 'el-icon-menu',
+      title: '首页'
+    }
+  },
+  {
+    path: "caseCenter",
+    name: "caseCenter",
+    component: () => import("@/views/caseCenter/index"),
+    meta: {
+      icon: 'el-icon-menu',
+      title: '案例中心'
+    }
+  },
+  {
+    path: "mediationOrg",
+    name: "mediationOrg",
+    component: () => import("@/views/mediationOrg/index"),
+    meta: {
+      icon: 'el-icon-menu',
+      title: '组织调解'
+    }
+  },
+]
+
 // 公用路由页面（不需要登录权限的路由页面，如：首页和登录页、注册页等一些不需要登陆权限的路由）
 // 【注意注意注意】：
 // 【重要】想要不需要登陆直接跳转记得在 src\permission.js 添加路由白名单，否则会被路由守卫拦截无法跳转。已登陆获取权限的用户不受影响，可以直接跳转。
@@ -33,9 +65,15 @@ export const commontRouterMap = [{
     path: "/resetPwd",
     name: "resetPwd",
     component: () => import("@/views/forgetPwd/index")
+  },
+  {
+    path: "/home",
+    name: "home",
+    component: () => import("@/views/layout/layout"),
+    redirect: '/home/index',
+    children: menuRouter
   }
 ];
-
 
 //实例化vue的时候只挂载commontRouterMap
 const createRouter = () =>

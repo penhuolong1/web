@@ -8,17 +8,16 @@
       :default-active="$route.path"
       mode="vertical"
       router
-      :collapse="isCollapse"
       :unique-opened="false"
       :collapse-transition="false"
+      @select="selectMenu"
     >
-      <sidebar-item :menu="getmenuRoutes" />
+      <sidebar-item />
     </el-menu>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
 
@@ -30,27 +29,16 @@ export default {
   },
   components: { SidebarItem },
   computed: {
-    ...mapGetters(['getrouters', 'getsidebar', 'getmenuRoutes']),
-    isCollapse() {
-      return !this.getsidebar.opened
-    },
     variables() {
       return variables
     }
   },
-  watch: {
-    // 监听浏览器直接输入路由，将此路由添加到tabnavBox
-    $route: function(val) {
-      this.selectmenu(val)
-    }
-  },
+  watch: {},
   methods: {
     //选择菜单触发的事件
-    selectmenu(key) {
-      this.$store.dispatch('addTab', {
-        title: key.meta && key.meta.title ? key.meta.title : '未设置标题',
-        path: key.path
-      })
+    selectMenu(index) {
+      console.log('-----------')
+      console.log(index)
     }
   }
 }

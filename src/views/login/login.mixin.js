@@ -1,5 +1,5 @@
 import md5 from 'md5'
-import GLOBAL from '@/utils/constVal'
+import GLOBVAL from '@/utils/constVal'
 import {login} from '@/api/user/user'
 export default {
   components: { },
@@ -23,9 +23,11 @@ export default {
   },
   mounted() {
     //判断是否有记住密码
-    let username = localStorage.getItem(this.mark)
+    let username = localStorage.getItem(this.local_username)
+    let password = localStorage.getItem(this.local_userpwd)
     if (username) {
       this.loginForm.username = username //获取记住的密码填入
+      this.loginForm.password = password
       this.remenberCheck = true
     }
   },
@@ -37,7 +39,8 @@ export default {
         if (valid) {
           //判断记住用户名是否被勾选
           if (this.remenberCheck) {
-            window.localStorage.setItem(this.mark, this.loginForm.username)
+            window.localStorage.setItem(this.local_username, this.loginForm.username)
+            window.localStorage.setItem(this.local_userpwd, this.loginForm.password)
           }
           //处理提交内容
           let sendData = JSON.parse(JSON.stringify(this.loginForm))
@@ -48,43 +51,30 @@ export default {
             duration: 0
           })
           login(sendData).then(res => {
-            console.log(res)
+            if (res.state === 100) {
+              this.$Message.destroy()
+              this.$router.push('/home')
+              this.getRole(res.roleType)
+            }
           })
-          // this.$store.dispatch('Login', sendData).then(res => {
-          //   //登录成功，跳转到后台Home主页
-          //   if (res.state == 100) {
-          //     let roles = res.data.roles
-          //     //获取角色信息
-          //     this.roleList = roles
-          //     if (roles.length > 0) {
-          //       //该用户只有一个身份
-          //       if (roles.length == 1) {
-          //         //默认直接选择第一个角色进行登录
-          //         this.setRole(roles[0].roleType)
-          //       }
-          //       //该用户有多个身份
-          //       if (roles.length > 1) {
-          //         //弹窗让用户选择角色身份
-          //         this.selectRoleShow = true
-          //       }
-          //     } else {
-          //       this.$Message.error({
-          //         content: '该用户无绑定任何身份角色，暂无权限登录',
-          //         duration: 5
-          //       })
-          //     }
-          //   } else {
-          //     this.clearLoaing()
-          //     this.changeUserCode()
-          //     this.loginForm.code = ''
-          //   }
-          // })
         } else {
-          this.changeUserCode()
           this.$message.error('请完善登录信息后登录！') //登录失败提示错误
           return false
         }
       })
+    },
+    remenberCheckChange(val) {
+      if (!val) {
+        window.localStorage.removeItem(this.local_username)
+        window.localStorage.removeItem(this.local_userpwd)
+      }
+    },
+    getRole(role) {
+      let app = GLOBVAL.SYS_NAME
+      let user_roles = app + '-userRoles'
+      // localStorage.setItem(user_Info, JSON.stringify(roles), 60); //60为 1分钟
+      localStorage.setItem(user_roles, JSON.stringify(role))
+      this.$store.commit('SET_ROLES', role)
     }
   }
 }
